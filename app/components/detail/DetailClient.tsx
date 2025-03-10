@@ -1,5 +1,7 @@
 "use client"
 
+import PageContainer from "../containers/PageContainer";
+
 type Product = {
     id: string;
     name: string;
@@ -20,8 +22,10 @@ type Product = {
 
 const DetailClient = ({ product }: { product: Product }) => {
     return (
-        <div>
-            <h1>{product.name}</h1>
+        <div className="my-10">
+            <PageContainer>
+                {product?.name}
+            </PageContainer>
         </div>
     )
 }
