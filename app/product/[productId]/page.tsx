@@ -7,9 +7,10 @@ type DetailProps = {
 }
 
 const Detail = ({ params }: { params: DetailProps }) => {
-    const productId = params;
+    const { productId } = params;
 
-    const product = products.find(product => product.id === productId);
+    const product = products.find(product => product.id == productId);
+    console.log(product);
     if (!product) {
         return <div>Product not found</div>;
     }
