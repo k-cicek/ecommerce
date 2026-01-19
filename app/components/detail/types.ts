@@ -8,6 +8,7 @@ export type User = {
   createdAt: string;
   updatedAt: string;
   role: "ADMIN" | "USER";
+  rating: number;
 };
 
 export type Review = {

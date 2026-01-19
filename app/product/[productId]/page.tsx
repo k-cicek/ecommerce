@@ -6,8 +6,8 @@ type DetailProps = {
     productId?: string;
 }
 
-const Detail = ({ params }: { params: DetailProps }) => {
-    const { productId } = params;
+const Detail = async ({ params }: { params: DetailProps }) => {
+    const { productId } = await params;
 
     const product = products.find(product => product.id == productId);
     console.log(product);
