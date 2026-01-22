@@ -7,8 +7,19 @@ import Button from "../general/Button"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { FaGoogle } from 'react-icons/fa'
 import Link from "next/link"
+import axios from "axios"
+import toast from "react-hot-toast"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { User } from "@prisma/client"
+import { useEffect } from "react"
 
-const RegisterClient = () => {
+interface RegisterClientProps {
+    currentUser: User | null | undefined;
+}
+
+const RegisterClient: React.FC<RegisterClientProps> = ({ currentUser }) => {
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -17,8 +28,31 @@ const RegisterClient = () => {
     } = useForm<FieldValues>()
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        console.log(data)
+        axios.post('/api/register', data).then(() => {
+            toast.success("Kayıt başarılı! Giriş yapabilirsiniz.")
+            signIn('credentials', {
+                email: data.email,
+                password: data.password,
+                redirect: false
+            }).then((callback) => {
+                if (callback?.ok) {
+                    router.push('/');
+                    router.refresh();
+                    toast.success("Giriş başarılı!")
+                }
+                if (callback?.error) {
+                    toast.error(callback.error);
+                }
+            })
+        })
     }
+    useEffect(() => {
+        if (currentUser) {
+            router.push('/cart');
+            router.refresh();
+        }
+    }, []);
+
     return (
         <AuthContainer>
             <div className="w-full md:w-[500px] p-3 shadow-lg rounded-md">
@@ -29,7 +63,7 @@ const RegisterClient = () => {
                 <Button text="Kayıt Ol" onClick={handleSubmit(onSubmit)} />
                 <div className="text-center my-2 text-sm text-red-500">Daha önceden hesabınız var mı? <Link className="underline text-xs font-bold" href="/login">Giriş Yapın</Link> </div>
                 <div className="text-center my-2 font-bold text-lg">OR</div>
-                <Button text="Google İle Üye Ol" outline icon={FaGoogle} onClick={() => { }} />
+                <Button text="Google İle Üye Ol" outline icon={FaGoogle} onClick={() => signIn('google')} />
             </div>
         </AuthContainer>
     )
