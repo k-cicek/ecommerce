@@ -32,19 +32,20 @@ const LoginClient: React.FC<LoginClientProps> = ({ currentUser }) => {
             redirect: false
         }).then((callback) => {
             if (callback?.ok) {
-                router.push('/');
                 router.refresh();
-                toast.success("Giriş başarılı!")
+                router.push('/cart')
+                toast.success('Login İşlemi Basarılı...')
             }
+
             if (callback?.error) {
-                toast.error(callback.error);
+                toast.error(callback.error)
             }
         })
     }
 
     useEffect(() => {
         if (currentUser) {
-            router.push('/cart');
+            router.push('/cart')
             router.refresh();
         }
     }, [])
@@ -63,4 +64,5 @@ const LoginClient: React.FC<LoginClientProps> = ({ currentUser }) => {
         </AuthContainer>
     )
 }
+
 export default LoginClient
