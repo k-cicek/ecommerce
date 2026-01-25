@@ -1,5 +1,5 @@
 import prisma from "@/libs/prismadb";
-import { products } from "./../../utils/Products";
+
 interface IParams {
   productId?: string;
 }

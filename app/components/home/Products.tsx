@@ -1,10 +1,7 @@
-// import { products } from "@/utils/Products"
 import Heading from "../general/Heading"
 import ProductCard from "./ProductCard"
-import getProducts from "@/app/actions/getProducts"
 
-const Products = async () => {
-    const products = await getProducts({ category: null, search: null })
+const Products = ({ products }: { products: any[] }) => {
     return (
         <div>
             <Heading text="Tüm Ürünler" />
