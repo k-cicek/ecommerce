@@ -8,7 +8,7 @@ interface AdminSidebarItemProps {
     url: string;
 }
 
-const AdminSidebarItem: React.FC<AdminSidebarItemProps> = ({ selected, name, icon: Icon, url }) => {
+const AdminSidebarItem = ({ selected, name, icon: Icon, url }: AdminSidebarItemProps) => {
     return (
         <div>
             <Link className={`cursor-pointer flex items-center gap-2 ${selected ? "text-slate-600 font-bold" : "text-white font-medium"}`} href={url}>

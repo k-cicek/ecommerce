@@ -17,7 +17,7 @@ interface LoginClientProps {
     currentUser: User | null | undefined;
 }
 
-const LoginClient: React.FC<LoginClientProps> = ({ currentUser }) => {
+const LoginClient = ({ currentUser }: LoginClientProps) => {
     const router = useRouter();
     const {
         register,

@@ -6,7 +6,7 @@ interface CheckboxProps {
     register?: UseFormRegister<FieldValues>;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ id, label, register }) => {
+const Checkbox = ({ id, label, register }: CheckboxProps) => {
     return (
         <div className="flex items-center gap-1">
             <input type="checkbox" {...(register ? register(id) : {})} />

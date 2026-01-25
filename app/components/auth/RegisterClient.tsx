@@ -18,7 +18,7 @@ import { useEffect } from "react"
 interface RegisterClientProps {
     currentUser: User | null | undefined
 }
-const RegisterClient: React.FC<RegisterClientProps> = ({ currentUser }) => {
+const RegisterClient = ({ currentUser }: RegisterClientProps) => {
     const router = useRouter();
     const {
         register,

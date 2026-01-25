@@ -6,7 +6,7 @@ interface CounterProps {
     decreaseFunc: () => void;
 }
 
-const Counter: React.FC<CounterProps> = ({ cartProduct, increaseFunc, decreaseFunc }) => {
+const Counter = ({ cartProduct, increaseFunc, decreaseFunc }: CounterProps) => {
     const buttonStyle = "w-8 h-8 border flex items-center justify-center rounded-md cursor-pointer text-lg"
     return (
         <div className="flex items-center gap-2">

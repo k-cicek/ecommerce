@@ -12,7 +12,7 @@ interface InputProps {
     errors?: FieldErrors;
 }
 
-const Input: React.FC<InputProps> = ({ id, placeholder, disabled, type, required, register, errors }) => {
+const Input = ({ id, placeholder, disabled, type, required, register, errors }: InputProps) => {
 
     return (
         <input className={`w-full h-12 p-3 rounded-md outline-none my-1.5 ${errors && errors[id] ? "border border-red-500" : "border border-slate-300"}`} id={id} placeholder={placeholder} disabled={disabled} type={type} {...(register ? register(id, { required }) : {})} />

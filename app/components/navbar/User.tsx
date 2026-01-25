@@ -9,7 +9,7 @@ import { AiOutlineUser } from 'react-icons/ai'
 interface UserProps {
     currentUser: User | null | undefined;
 }
-const User: React.FC<UserProps> = ({ currentUser }) => {
+const User = ({ currentUser }: UserProps) => {
     const router = useRouter()
     const [openMenu, setOpenMenu] = useState(false)
 

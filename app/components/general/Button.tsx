@@ -10,7 +10,7 @@ interface ButtonProps {
     disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ text, onClick, small, outline, disabled, icon: Icon }) => {
+const Button = ({ text, onClick, small, outline, disabled, icon: Icon }: ButtonProps) => {
     return (
         <button type="button" disabled={disabled} className={`my-1 flex items-center justify-center gap-2 rounded-lg p-3 ${small ? "w-[250px]" : "w-full "} ${outline ? "border text-black" : "bg-black text-white"}`} onClick={onClick} >
             {Icon && <Icon />}

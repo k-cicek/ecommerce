@@ -8,7 +8,7 @@ interface ChoiceInputProps {
     selected?: boolean;
 }
 
-const ChoiceInput: React.FC<ChoiceInputProps> = ({ text, icon: Icon, onClick, selected }) => {
+const ChoiceInput = ({ text, icon: Icon, onClick, selected }: ChoiceInputProps) => {
     return (
         <div className={`my-3 px-4 py-2 cursor-pointer rounded-md flex items-center gap-2 justify-center h-16 border ${selected ? "border-black" : "border-gray-200"}`} onClick={() => onClick(text)}>
             <Icon />
