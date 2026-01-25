@@ -1,7 +1,6 @@
 import { getCurrentUser } from "@/app/actions/getCurrentUser"
 import getProducts from "@/app/actions/getProducts"
 import ManageClient from "@/app/components/admin/ManageClient"
-import AuthContainer from "@/app/components/containers/AuthContainer"
 import WarningText from "@/app/components/WarningText"
 
 const Manage = async () => {
@@ -14,9 +13,9 @@ const Manage = async () => {
         )
     }
     return (
-        <AuthContainer>
+        <div className="w-full m-2">
             <ManageClient products={products} />
-        </AuthContainer>
+        </div>
     )
 }
 
