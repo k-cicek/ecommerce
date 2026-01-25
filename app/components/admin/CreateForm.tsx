@@ -34,15 +34,15 @@ const CreateForm = () => {
             icon: FaTabletAlt
         },
         {
-            name: "Mikrofon",
+            name: "Akıllı Saat",
             icon: CiMicrophoneOn
         },
         {
-            name: "Ayakkabı1",
+            name: "Telefon",
             icon: FaComputer
         },
         {
-            name: "Ayakkabı2",
+            name: "Televizyon",
             icon: FaComputer
         },
     ]
