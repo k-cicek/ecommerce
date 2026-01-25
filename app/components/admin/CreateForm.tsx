@@ -1,24 +1,25 @@
 "use client"
-
+import { FaComputer } from "react-icons/fa6";
+import { GiBallerinaShoes } from "react-icons/gi";
+import { FaTabletAlt } from "react-icons/fa";
+import { CiMicrophoneOn } from "react-icons/ci";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import Heading from "../general/Heading"
 import Input from "../general/Input"
 import Checkbox from "../general/Checkbox"
-import { FaComputer } from "react-icons/fa6"
-import { GiBallerinaShoes } from "react-icons/gi"
-import { FaTabletAlt } from "react-icons/fa"
-import { CiMicrophoneOn } from "react-icons/ci"
-import ChoiceInput from "../general/ChoiceInput"
-import Button from "../general/Button"
-import { useState } from "react"
-import toast from "react-hot-toast"
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import firebaseApp from "@/libs/firebase"
-
+import ChoiceInput from "../general/ChoiceInput";
+import Button from "../general/Button";
+import { useState } from "react";
+import firebaseApp from "@/libs/firebase";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const CreateForm = () => {
-    const [img, setImg] = useState<File | null>(null);
-    const [uploadedImg, setUploadedImg] = useState<string | null>(null);
+    const [img, setImg] = useState<File | null>(null)
+    const router = useRouter();
+
     const categoryList = [
         {
             name: "Bilgisayar",
@@ -46,6 +47,7 @@ const CreateForm = () => {
         },
     ]
 
+
     const {
         register,
         handleSubmit,
@@ -54,30 +56,38 @@ const CreateForm = () => {
         formState: { errors },
     } = useForm<FieldValues>({
         defaultValues: {
-            name: '',
-            description: '',
-            brand: '',
-            category: '',
-            price: '',
-            inStock: false,
-            image: ''
+            name: "",
+            description: "",
+            brand: "",
+            category: "",
+            price: "",
+            image: "",
+            inStock: false
         }
     })
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        console.log(data);
-        const handleChange = async () => {
-            toast.success('Yükleme Başarılı!');
-            try {
-                const storage = getStorage(firebaseApp);
-                const storageRef = ref(storage, 'images/shop.jpg');
+        console.log("data", data)
 
-                const uploadTask = uploadBytesResumable(storageRef, img);
+        let uploadedImg;
+
+        const handleChange = async () => {
+            toast.success('Yükleme işlemi basarılı !!!')
+            try {
+                if (!img) {
+                    toast.error('Lütfen önce bir resim seçin');
+                    return;
+                }
+
+                const storage = getStorage(firebaseApp);
+                const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}-${img.name}`;
+                const storageRef = ref(storage, `images/${uniqueName}`);
+
+
+                const uploadTask = uploadBytesResumable(storageRef, img as Blob);
                 await new Promise<void>((resolve, reject) => {
                     uploadTask.on('state_changed',
                         (snapshot) => {
-                            // Observe state change events such as progress, pause, and resume
-                            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                             console.log('Upload is ' + progress + '% done');
                             switch (snapshot.state) {
@@ -90,47 +100,61 @@ const CreateForm = () => {
                             }
                         },
                         (error) => {
-                            reject(error);
+                            reject(error)
                         },
                         () => {
                             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                                 console.log('File available at', downloadURL);
-                                setUploadedImg(downloadURL);
+                                uploadedImg = downloadURL;
+                                resolve()
+                            }).catch((error) => {
+                                console.log(error)
                             });
-                            resolve();
                         }
                     );
                 })
 
+
             } catch (error) {
-                console.log(error);
+                console.log(error)
             }
         }
-        await handleChange();
+        await handleChange()
 
-        let newData = { ...data, image: uploadedImg };
-        console.log(newData);
+        let newData = { ...data, image: uploadedImg }
+
+        axios.post('/api/product', newData)
+            .then(() => {
+                toast.success('Ürün ekleme işlemi basarılı !!!')
+                router.refresh();
+
+            }).catch((error) => {
+                console.log(error, "error")
+            })
+
+        console.log(newData, "NEWDATAAAA")
     }
 
-    const category = watch("category");
+    const category = watch('category')
 
     const setCustomValue = (id: string, value: any) => {
         setValue(id, value, {
             shouldDirty: true,
             shouldTouch: true,
-            shouldValidate: true,
-        });
+            shouldValidate: true
+        })
     }
 
-    const onChangeFun = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeFunc = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            setImg(e.target.files[0]);
+            setImg(e.target.files[0])
         }
     }
 
+
     return (
         <div>
-            <Heading text="ÜRÜN OLUŞTUR" center />
+            <Heading text="ÜRÜN OLUSTUR" center />
             <Input
                 placeholder="Ad"
                 type="text"
@@ -140,7 +164,7 @@ const CreateForm = () => {
                 required
             />
             <Input
-                placeholder="Açıklama"
+                placeholder="Acıklama"
                 type="text"
                 id="description"
                 register={register}
@@ -165,22 +189,25 @@ const CreateForm = () => {
             />
             <Checkbox
                 id="inStock"
-                label="Ürün Stokta Mevcut mu?"
+                label="Ürün Stokta Mevcut mu ?"
                 register={register}
             />
             <div className="flex flex-wrap gap-3">
-                {categoryList.map((cat, i) => (
-                    <ChoiceInput
-                        key={i}
-                        icon={cat.icon}
-                        text={cat.name}
-                        onClick={(category) => setCustomValue("category", category)}
-                        selected={category === cat.name}
-                    />
-                ))}
+                {
+                    categoryList.map((cat, i) => (
+                        <ChoiceInput
+                            key={i}
+                            icon={cat.icon}
+                            text={cat.name}
+                            onClick={(category) => setCustomValue("category", category)}
+                            selected={category == cat.name}
+                        />
+                    ))
+                }
             </div>
-            <input className="mb-2" type="file" onChange={onChangeFun} />
-            <Button disabled={false} text="Ürün Oluştur" onClick={handleSubmit(onSubmit)} />
+            <input className="mb-2" type="file" onChange={onChangeFunc} />
+            <Button text="Ürün Olustur" onClick={handleSubmit(onSubmit)} />
+
         </div>
     )
 }
