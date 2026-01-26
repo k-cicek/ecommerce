@@ -2,11 +2,18 @@ import Image from "next/image"
 
 const Banner = () => {
     return (
-        <div className="h-[237px] flex items-center justify-center">
-            <div className="h-[237px] relative w-full">
-                <Image src={"/banner.jpeg"} fill alt="" className="object-cover" />
+        <section className="w-full">
+            <div className="relative w-full aspect-[16/5]">
+                <Image
+                    src="/banner.jpeg"
+                    alt="Kampanya banner"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
+                    className="object-cover object-center"
+                    placeholder="empty"
+                />
             </div>
-        </div>
+        </section>
     )
 }
 
